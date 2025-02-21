@@ -8,8 +8,8 @@ const dimensions = getObjectFitSize(
 );
 
 let debug = {
-    velocities: true,
-    timeDelay: 100
+    velocities: false,
+    timeDelay: 0
 }
 
 // player object
