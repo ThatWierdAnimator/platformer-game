@@ -7,6 +7,11 @@ const dimensions = getObjectFitSize(
     c.height
 );
 
+let debug = {
+    velocities: true,
+    timeDelay: 100
+}
+
 // player object
 let player = {
     x: 0,
@@ -30,14 +35,41 @@ let dPressed = false;
 
 // draw everything
 function render() {
-  c.width = dimensions.width;
-  c.height = dimensions.height;
+    c.width = dimensions.width;
+    c.height = dimensions.height;
 
-  let ctx = c.getContext("2d");
-  ctx.scale(1, 1);
+    let ctx = c.getContext("2d");
+    ctx.scale(1, 1);
 
-  // draw player
-  ctx.fillRect(player.x, player.y, player.size, player.size);
+    // draw player
+    ctx.fillRect(player.x, player.y, player.size, player.size);
+
+    // draw velocites for debugging
+    if (debug.velocities) {
+        // diagonal
+        if (player.velX !== 0 && player.velY !== 0)
+        {   
+            ctx.strokeStyle = 'green';
+            ctx.beginPath();
+            ctx.moveTo(player.x + player.size/2, player.y + player.size/2);
+            ctx.lineTo(player.x + player.velX * 17 + player.size/2, player.y + player.velY * 17 + player.size/2);
+            ctx.stroke();
+        }
+
+        // horizontal
+        ctx.strokeStyle = 'blue';
+        ctx.beginPath();
+        ctx.moveTo(player.x + player.size/2, player.y + player.size/2);
+        ctx.lineTo(player.x + player.velX * 20 + player.size/2, player.y + player.size/2);
+        ctx.stroke();
+
+        // vertical
+        ctx.strokeStyle = 'red';
+        ctx.beginPath();
+        ctx.moveTo(player.x + player.size/2, player.y + player.size/2);
+        ctx.lineTo(player.x + player.size/2, player.y + player.velY * 20 + player.size/2);
+        ctx.stroke();
+    }
 }
   
 // adapted from: https://www.npmjs.com/package/intrinsic-scale
@@ -143,7 +175,7 @@ addEventListener('keyup', e => {
 function updateAll() {
     updatePlayer();
     render();
-    setTimeout(updateAll, 1);
+    setTimeout(updateAll, 1 + debug.timeDelay);
 }
 
 updateAll();
